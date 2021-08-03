@@ -9,20 +9,7 @@ This was just a small challenge I set for my self a while ago, so I cleaned it u
 and released it here, for other people to look at the implementation and how I went by doing it.
 
 ## Example
-It really is simple:
-```c++
-#include <iostream>
-
-#include "Grabber.hpp"
-
-int main()
-{
-	std::cout << "Tokens found:\n" << grabber::grab_tokens();
-
-	std::cin.get(); // Blocking until input
-	return 0;
-}
-```
+It really is simple, have a look at [this](Example.cpp) example.
 
 ## Note
 Please. for the love of god, don't be an asshole.

